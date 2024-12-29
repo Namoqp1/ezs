@@ -255,7 +255,6 @@ if not ResetSetting then
 	if isfile(InsidePath..DefaultConfig["Select Config"]..".json") then 
 		config = Http:JSONDecode(readfile(InsidePath..DefaultConfig["Select Config"]..".json"))
 		print("YED")
-		print(PrintTable(config))
 	end
 end
 
@@ -341,7 +340,7 @@ LeftPageMain:AddToggle("Full Auto Play",{Stats = (config["Full Auto Play"]) , ca
 				end
 			end
 			local all_poslist = {}
-			
+
 			local centerPart = createPartBetween(workspace.Game.Map.Waypoints["1"].Position, workspace.Game.Map.Waypoints["2"].Position, 1.5)
 			local numParts = 12 
 			local partSize = Vector3.new(1, 1, 1)
@@ -354,21 +353,21 @@ LeftPageMain:AddToggle("Full Auto Play",{Stats = (config["Full Auto Play"]) , ca
 			local centerCFrame = centerPart.CFrame
 
 			for i = 0, numParts - 1 do
-				
+
 				local t = i / (numParts - 1)
 
 				local z = -width + t * 2 * width
 				local x = -length + t * 2 * length
 
 				table.insert(all_poslist,CFrame.new(centerCFrame * Vector3.new(-length - offsetDistance, 0, z)))
-				
+
 				table.insert(all_poslist,CFrame.new(centerCFrame * Vector3.new(length + offsetDistance, 0, z)))
 
 				table.insert(all_poslist,CFrame.new(centerCFrame * Vector3.new(x, 0, width + offsetDistance)))
 
 				table.insert(all_poslist,CFrame.new(centerCFrame * Vector3.new(x, 0, -width - offsetDistance)))
 			end
-			
+
 			spawn(function()
 				while config["Full Auto Play"] and wait() do 
 					if checkifallvl2() then 
