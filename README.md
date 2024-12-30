@@ -58,11 +58,6 @@ spawn(function()
 	end
 end)
 
-SaveManager:SetLibrary(Fluent)
 InterfaceManager:SetLibrary(Fluent)
-
-InterfaceManager:SetFolder("FluentScriptHub")
-SaveManager:SetFolder("FluentScriptHub/specific-game")
-
+InterfaceManager:SetFolder("Test")
 InterfaceManager:BuildInterfaceSection(Tabs.Settings)
-SaveManager:BuildConfigSection(Tabs.Settings)
