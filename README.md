@@ -40,23 +40,20 @@ local Tabs = {
 local function saveSettings(folderName, fileName)
 	local filePath = folderName .. "/" .. fileName .. ".txt"
 
-	-- สร้างโฟลเดอร์ถ้ายังไม่มี
 	if not isfolder(folderName) then
 		makefolder(folderName)
 		print("สร้างโฟลเดอร์: " .. folderName)
 	end
 
-	-- สร้างไฟล์ถ้ายังไม่มี
 	if not isfile(filePath) then
 		writefile(filePath, "")
 		print("สร้างไฟล์: " .. filePath)
 	end
 
-	-- เซฟค่า _G ที่เป็น boolean ลงไฟล์
 	local content = ""
 	for key, value in pairs(_G) do
 		if type(value) == "boolean" then
-			content = content .. key .. " = " .. tostring(value) .. "\n"
+			content = content .. "_G." .. key .. " = " .. tostring(value) .. "\n"
 		end
 	end
 	writefile(filePath, content)
@@ -70,10 +67,9 @@ local function loadSettings(folderName, fileName)
 	if isfile(filePath) then
 		local content = readfile(filePath)
 		for line in string.gmatch(content, "[^\r\n]+") do
-			-- ใช้ string.match เพื่อจับคู่กับค่า true/false
-			local key, value = string.match(line, "^(%w+) = (true|false)$")
+			local key, value = string.match(line, "^_G%.(%w+) = (true|false)$")
 			if key and value then
-				_G[key] = (value == "true")  -- กำหนดค่าให้ _G
+				_G[key] = (value == "true")
 			end
 		end
 		print("โหลดค่าจากไฟล์กลับเข้า _G")
