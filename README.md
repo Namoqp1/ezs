@@ -34,63 +34,10 @@ local Window = Fluent:CreateWindow({
 })
 
 local Tabs = {
-	Setting = Window:AddTab({ Title = "Setting", Icon = "settings" })
+	Setting = Window:AddTab({ Title = "Setting", Icon = "settings" }),
+	Settings = Window:AddTab({ Title = "Settings", Icon = "settings" })
 }
 
-local function saveSettings(folderName, fileName)
-	local filePath = folderName .. "/" .. fileName .. ".txt"
-
-	if not isfolder(folderName) then
-		makefolder(folderName)
-		print("สร้างโฟลเดอร์: " .. folderName)
-	end
-
-	if not isfile(filePath) then
-		writefile(filePath, "")
-		print("สร้างไฟล์: " .. filePath)
-	end
-
-	local content = ""
-	for key, value in pairs(_G) do
-		if type(value) == "boolean" then
-			content = content .. "_G." .. key .. " = " .. tostring(value) .. "\n"
-		end
-	end
-	writefile(filePath, content)
-	print("บันทึกค่า _G ลงไฟล์: " .. filePath)
-end
-
-local function loadSettings(folderName, fileName)
-	local filePath = folderName .. "/" .. fileName .. ".txt"
-
-	-- โหลดค่าจากไฟล์กลับเข้า _G
-	if isfile(filePath) then
-		local content = readfile(filePath)
-		for line in string.gmatch(content, "[^\r\n]+") do
-			local key, value = string.match(line, "^_G%.(%w+) = (true|false)$")
-			if key and value then
-				_G[key] = (value == "true")
-			end
-		end
-		print("โหลดค่าจากไฟล์กลับเข้า _G")
-	else
-		print("ไม่พบไฟล์: " .. filePath)
-	end
-end
-
-
-local folderName = "MyFolder"
-local fileName = "lol"
-
-task.spawn(function()
-	while true do task.wait(1)
-		if true then
-			saveSettings(folderName, fileName)
-		end
-	end
-end)
-
-loadSettings(folderName, fileName)
 
 
 Tabs.Setting:AddToggle("Host Bot", {
@@ -111,3 +58,8 @@ spawn(function()
 	end
 end)
 
+InterfaceManager:SetFolder("FluentScriptHub")
+SaveManager:SetFolder("FluentScriptHub/specific-game")
+
+InterfaceManager:BuildInterfaceSection(Tabs.Settings)
+SaveManager:BuildConfigSection(Tabs.Settings)
