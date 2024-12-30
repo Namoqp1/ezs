@@ -37,46 +37,52 @@ local Tabs = {
 	Setting = Window:AddTab({ Title = "Setting", Icon = "settings" })
 }
 
+local settings = {} -- ตารางตั้งค่าของตัวเอง
 
 local function saveSettings(folderName, fileName)
 	local filePath = folderName .. "/" .. fileName .. ".txt"
 
+	-- สร้างโฟลเดอร์ถ้ายังไม่มี
 	if not isfolder(folderName) then
 		makefolder(folderName)
 		print("สร้างโฟลเดอร์: " .. folderName)
 	end
 
+	-- สร้างไฟล์ถ้ายังไม่มี
 	if not isfile(filePath) then
 		writefile(filePath, "")
 		print("สร้างไฟล์: " .. filePath)
 	end
 
+	-- เซฟค่า settings ที่เป็น boolean ลงไฟล์
 	local content = ""
-	for key, value in pairs(_G) do
+	for key, value in pairs(settings) do
 		if type(value) == "boolean" then
 			content = content .. key .. " = " .. tostring(value) .. "\n"
 		end
 	end
 	writefile(filePath, content)
-	print("บันทึกค่า _G ลงไฟล์: " .. filePath)
+	print("บันทึกค่า settings ลงไฟล์: " .. filePath)
 end
 
 local function loadSettings(folderName, fileName)
 	local filePath = folderName .. "/" .. fileName .. ".txt"
 
+	-- โหลดค่าจากไฟล์กลับเข้า settings
 	if isfile(filePath) then
 		local content = readfile(filePath)
 		for line in string.gmatch(content, "[^\r\n]+") do
 			local key, value = string.match(line, "^(%w+) = (true|false)$")
 			if key and value then
-				_G[key] = (value == "true")
+				settings[key] = (value == "true")
 			end
 		end
-		print("โหลดค่าจากไฟล์กลับเข้า _G")
+		print("โหลดค่าจากไฟล์กลับเข้า settings")
 	else
 		print("ไม่พบไฟล์: " .. filePath)
 	end
 end
+
 
 local folderName = "MyFolder"
 local fileName = "lol"
